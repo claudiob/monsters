@@ -1,6 +1,6 @@
 Monsters::Application.routes.draw do
 
-  resources :monsters
+  match 'monster', :to => 'monsters#monster'
   root :to => "monsters#index"
 
 end

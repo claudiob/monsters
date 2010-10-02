@@ -1,5 +1,18 @@
-<form method="get" action="/monsters/show.svg">
+<form method="get" action="/">
   <label for="username">Enter your Last.fm username:</label>
-  <input type="text" name="username" id="username" value="" />
+  <input type="text" name="username" id="username" value="<%= params[:username] %>" />
   <input type="submit">
 </form>
+
+<% if params[:username] %>
+<h1><%= params[:username]%>'s monster</h1>
+
+<audio src="<%= @audio %>" autoplay="autoplay"></audio>
+
+<!--div id="svg1" style="width: 500px; height: 500px"></div-->
+
+<embed id="monster"  src="/monster.svg?tempo=<%= @tempo %>" name="monster" type="image/svg+xml">
+
+<p><%= @tempo %></p>
+<p><%=  @lyrics %></p>
+<% end %>
