@@ -1,20 +1,38 @@
-<form method="get" action="/">
-  <label for="username">Enter your Last.fm username:</label>
-  <input type="text" name="username" id="username" value="<%= @random_user %>" />
-  <input type="submit">
-</form>
-
 <% if params[:username] %>
 
-<h1><%= params[:username]%>'s <%= @name %></h1>
+<section>
+<embed id="monster" src="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>&amp;mode=<%= @mode %>" name="monster" type="image/svg+xml">
+<aside>
+<img src="/images/logo.gif" width="275" height="100">
+
+<p>Your monster is called:</p>
+<h1><%= @name %></h1>
+<p>He likes <%= @artist%>, <%= @tag%> and music in a <%= @mode%> key.</p>
 
 <audio src="<%= @audio %>" autoplay="autoplay"></audio>
 
 <!--div id="svg1" style="width: 500px; height: 500px"></div-->
 
-<embed id="monster" src="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>&amp;mode=<%= @mode %>" name="monster" type="image/svg+xml">
+<nav><a href="/">Make another monster</a> | <a href="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>&amp;mode=<%= @mode %>">Download SVG file</a></nav>
+</aside>
+</section>
 
-<p><%= @artist %> | <%= @title %> | <%= @tempo %> | <%= @mode %> | <%= @tag %></p>
-<p><a href="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>&amp;mode=<%= @mode %>">Right click and download</a></p>
+<% else %>
+
+<header>
+<form method="get" action="/">
+  <label for="username">Enter your Last.fm username:</label>
+  <input type="text" name="username" id="username" value="<%= @random_user %>" />  
+
+  <input type="submit">
+</form>
 
 <% end %>
+</header>
+
+<footer>
+A hack for <a href="http://bcn.musichackday.org/">Music Hack Day Barcelona</a> by <a href="http://hannahdonovan.com">Hannah Donovan</a> and <a href="http://claudiob.github.com">Claudio Baccigalupo</a>.<br />
+Made in 24 hours with APIs from <a href="http://last.fm/api">Last.fm</a>, <a href="http://bmat.com/ella">BMAT</a>, <a href="http://developer.musixmatch.com/">Musixmatch</a>, <a href="http://developer.echonest.com/docs/v4/">The Echo Nest</a>, and <a href="http://developer.7digital.net/">7digital</a>.<br />
+Best seen on Safari and Chrome (what did you expect? IE6?).
+Check out the <a href="http://github.com/claudiob/monsters">source code</a>.
+</footer>

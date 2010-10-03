@@ -1,8 +1,44 @@
 .str0 {stroke:#DA251D; stroke-width:55; color:#DA251D}
 
 .fil0 {fill:yellow}
+body {background: #fff; color: #000; font-weight: 300; font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center;}
+header, footer, section {
+  width: 870px;
+  margin: 0 auto;
+  }
 
-body {background-color:#fff; text-align: center;}
+aside {color: #666; font-size: 1.2em; float: left;}
+h1 {padding: 0; margin: 0;}
+header {
+   background: url(/images/bkgd.gif) no-repeat top center;
+  }
+  
+section {padding-top: 40px;}
+nav {padding-top: 80px;}
 
-embed {height: 400px;}
+#submit {
+  background: #fff url(/images/rails.png) no-repeat top center;
+}  
+form {
+  padding-top: 400px;
+  padding-right: 100px;
+  text-align: right;}
 
+embed {height: 400px; float: right;}
+
+input[type="submit"] {
+  border: 0;
+	width: 55px;
+	height: 40px;
+	cursor: pointer;
+	text-indent: -9999px;
+	background: transparent url(/images/go_button.gif) no-repeat top right;
+}
+input[type="submit"]:hover {
+	background: transparent url(/images/go_button.gif) no-repeat bottom right;
+}
+
+nav, footer { font-size: 0.75em; }
+footer {clear: both; color: #ccc; padding-top: 70px; line-height: 1.5em;}
+footer a {color: #aac;}
+footer a:hover {color: #669;}
