@@ -6,7 +6,7 @@
 <img src="/images/logo.gif" width="275" height="100">
 
 <p>Your monster is called:</p>
-<h1><%= @name %></h1>
+<h1><%= @name.titleize %></h1>
 <p>He likes <%= @artist%>, <%= @tag%> and music in a <%= @mode%> key.</p>
 
 <audio src="<%= @audio %>" autoplay="autoplay"></audio>

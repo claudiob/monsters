@@ -28,7 +28,7 @@ class MonstersController < ApplicationController
 
   def index
     sample_users = {:emo => 'RealitySound', :hip_hop => 'nigz0r', :pop => 
-      'luizf3ernando', :acoustic => 'NoaKaiba', :rock => 'xnetuno',
+      'luizf3ernando', :acoustic => 'timecircuits', :rock => 'xnetuno',
       :punk => 'Ferlyrusuh'}
     @random_user = sample_users.values[rand(sample_users.length)]
 
@@ -128,8 +128,8 @@ class MonstersController < ApplicationController
     split.delete_if{|x| @title.downcase.include? x.downcase}
     split.sort!{|y, x| x.length <=> y.length}
     first_two = split.first(2)
-    @name = split[0][0..split[0].length/3] + split[1][split[1].length*2/3..split[1].length]
-    suffixes = ['asaurus', 'akuna', 'eedle', 'erpie', 'orina', 'ape', 'anine', 'eebel', 'ode', 'orn', 'yther', 'eon', 'uto', 'owl', 'ichu', 'ola', 'itar', 'yle', 'oom', 'oose', 'otic', 'aptor', 'eus']
+    @name = split[0][0..split[0].length/3] + ['a','e','i','o','u'][rand(5)] + split[1][split[1].length/2..split[1].length]
+    suffixes = ['us', 'una', 'eel', 'erie', 'ina', 'ape', 'ine', 'el', 'ode', 'orn', 'er', 'eon', 'uto', 'owl', 'ichu', 'ola', 'itar', 'yle', 'oom', 'oose', 'otic', 'eus']
     @name << suffixes[rand(suffixes.length)]
   
 
