@@ -7,8 +7,6 @@ A monstruous hack by hannah@last.fm and claudiob@gmail.com
 * Make image exportable
 * Set dimensions and background
 * Think about lyrics
-* Tag: Last.fm user >> getTopTags >> top tag (should be a genre tag)
-* Song: >> top Artist (within the genre) >> top Track 
-* Check Firefox
+* Check why Firefox does not animate
 * Add a license
 

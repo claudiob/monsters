@@ -11,8 +11,7 @@
 
 <!--div id="svg1" style="width: 500px; height: 500px"></div-->
 
-<embed id="monster"  src="/monster.svg?tempo=<%= @tempo %>" name="monster" type="image/svg+xml">
+<embed id="monster" src="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>" name="monster" type="image/svg+xml">
 
-<p><%= @tempo %></p>
-<p><%=  @lyrics %></p>
+<p><%= @artist %> | <%= @title %> | <%= @tempo %> | <%= @tag %></p>
 <% end %>
