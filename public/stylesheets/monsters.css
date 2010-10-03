@@ -2,6 +2,7 @@
 
 .fil0 {fill:yellow}
 
-body {background-color:#efffdd;}
+body {background-color:#efffdd; text-align: center;}
 
-#Layer_1 {height: 500px; width: 800px;}
+embed {height: 450px;}
+

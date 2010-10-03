@@ -41,12 +41,15 @@ class MonstersController < ApplicationController
           print "Trying title: #{title}\n"
           
           # Echonest > get tempo
-          tempo = get_doc 'http://developer.echonest.com/api/v4/song/search', 
+          summary = get_doc 'http://developer.echonest.com/api/v4/song/search', 
           {:api_key => ENV['ECHONEST_KEY'], :format => 'xml', :results => 1,
            :artist => artist, :title => title, :bucket => 'audio_summary'},
-           '/response/songs/song/audio_summary/tempo'
+           '/response/songs/song/audio_summary', false
+          tempo = summary.first.find_first('tempo').content
+          mode = summary.first.find_first('mode').content
+           
           unless tempo.nil? || tempo.empty?
-            print "Trying tempo: #{tempo.first}\n"
+            print "Trying tempo: #{tempo}\n"
 
             tracks_id = get_doc 'http://api.7digital.com/1.2/track/search',
             {:oauth_consumer_key => "musichackday", :country => 'gb', 
@@ -56,7 +59,8 @@ class MonstersController < ApplicationController
               artist_name = track.find_first("artist/name").content
               if artist_name.downcase.eql? artist.downcase
                 @audio = "http://api.7digital.com/1.2/track/preview?trackId=#{track["id"].to_i}&country=gb&oauth_consumer_key=musichackday"
-                @tempo = tempo.first.to_i
+                @tempo = tempo.to_i
+                @mode = mode.to_i
                 @title = title
                 @artist = artist
                 @tag = tags.first
@@ -71,8 +75,10 @@ class MonstersController < ApplicationController
     end      
     @title ||= "Paparazzi" # Just in case
     @tempo ||= 120  # Just in case
+    @mode ||= 1
     @artist ||= "Lady Gaga" # Just in case no top artist has a top tag
     @tag ||= "pop" # Just in case no top artist has a top tag
+    
 
     # Musixmatch > get lyrics
     # response_body = @user_agent.__send__('get_content', 
@@ -89,8 +95,6 @@ class MonstersController < ApplicationController
     # @lyrics = xml.find('/message/body/lyrics_list/lyrics/lyrics_body').first.content
 
   end
-
-
 
   def monster
 
@@ -125,12 +129,42 @@ class MonstersController < ApplicationController
 
     docs = doc.to_s
     docs.gsub! /animDuration;/, "&animDuration;"
-    tempo = params[:tempo].empty? ? 120 : params[:tempo].to_i
-    tag = params[:tag].empty? ? "pop" : params[:tag]
+    tempo = params[:tempo].nil? || params[:tempo].empty? ? 120 : params[:tempo].to_i
+    tag = params[:tag].nil? || params[:tag].empty? ? "pop" : params[:tag]
+    mode = 0 #params[:mode].nil? || params[:mode].empty? ? 1 : params[:mode]
     docs.gsub! /svg10.dtd\">/, "svg10.dtd\" [ <!ENTITY animDuration \"#{60000/tempo/500.0}\"> ]>"
     # Set the color given the tag
     print "tag: #{params[:tag]}"
     docs.gsub! /#93CFC9/, GENRES[tag.downcase]
+    # Remove width/height
+    docs.gsub! /width="(.*?)px" height="(.*?)px"/, ""
+    docs.gsub! /viewBox="(.*?)" enable-background="(.*?)"/, "viewBox=\"0 0 160 240.687\""
+    # Add background
+    if mode.zero? # minor
+      docs.gsub! /xml:space="preserve">/, "xml:space=\"preserve\"><rect fill=\"#2E243A\" width=\"160\" height=\"240.001\"/>
+<rect y=\"200.105\" fill=\"#4D4D4D\" width=\"160\" height=\"40.581\"/>
+<path fill=\"#CCCCCC\" d=\"M34.896,36.538c-4.157-6.287-3.904-14.209,0.016-20.119c-2.331,0.432-4.616,1.328-6.718,2.718
+	c-8.391,5.548-10.695,16.848-5.147,25.237c5.548,8.392,16.847,10.694,25.237,5.147c2.102-1.39,3.822-3.141,5.132-5.117
+	C46.442,45.696,39.054,42.828,34.896,36.538z\"/>
+<polygon fill=\"#808080\" points=\"91.186,18.116 91.953,19.67 93.666,19.919 92.426,21.128 92.719,22.836 91.186,22.029 
+	89.652,22.836 89.945,21.128 88.705,19.919 90.419,19.67 \"/>
+<polygon fill=\"#808080\" points=\"49.767,25.033 50.534,26.586 52.248,26.836 51.008,28.045 51.3,29.752 49.767,28.946 48.234,29.752 
+	48.526,28.045 47.286,26.836 49,26.586 \"/>
+<polygon fill=\"#808080\" points=\"70.249,42.477 71.125,44.252 73.084,44.537 71.667,45.919 72.001,47.87 70.249,46.949 68.496,47.87 
+	68.831,45.919 67.413,44.537 69.372,44.252 \"/>"
+    else
+      docs.gsub! /xml:space="preserve">/, "xml:space=\"preserve\"><rect fill=\"#EFF8FA\" width=\"160\" height=\"240.001\"/>
+      <g>
+      	<circle fill=\"#F9E925\" cx=\"119.225\" cy=\"47.119\" r=\"23.076\"/>
+      </g>
+      <g>
+      	<path fill=\"#F9E925\" d=\"M87.934,46.27c0.002-15.549,12.604-28.148,28.15-28.15l0,0c15.543,0.002,28.146,12.601,28.148,28.15l0,0c-0.002,15.545-12.605,28.146-28.148,28.148l0,0C100.538,74.417,87.936,61.815,87.934,46.27L87.934,46.27z M88.935,46.27c0.026,14.992,12.155,27.121,27.149,27.148l0,0c14.992-0.027,27.121-12.156,27.146-27.148l0,0c-0.024-14.996-12.153-27.123-27.146-27.15l0,0C101.09,19.147,88.961,31.274,88.935,46.27L88.935,46.27z\"/>
+      </g>
+      <g>
+      	<path fill=\"#F9E925\" d=\"M87.935,40.343c0-16.998,13.78-30.783,30.783-30.783l0,0c17,0,30.78,13.785,30.78,30.783l0,0h0.002c-0.002,17.002-13.784,30.783-30.782,30.783l0,0C101.715,71.126,87.935,57.346,87.935,40.343L87.935,40.343z M88.936,40.343c0.029,16.449,13.331,29.752,29.782,29.782l0,0c16.446-0.029,29.752-13.333,29.781-29.782l0,0c-0.029-16.446-13.335-29.752-29.781-29.781l0,0C102.267,10.591,88.965,23.897,88.936,40.343L88.936,40.343z\"/>
+      </g>
+      <rect y=\"200.105\" fill=\"#4D4D4D\" width=\"160\" height=\"40.581\"/>"
+    end
     
     respond_with(docs) do |format|
       format.svg {render :xml => docs}
