@@ -1,19 +1,20 @@
 <form method="get" action="/">
   <label for="username">Enter your Last.fm username:</label>
-  <input type="text" name="username" id="username" value="<%= params[:username] %>" />
+  <input type="text" name="username" id="username" value="<%= @random_user %>" />
   <input type="submit">
 </form>
 
 <% if params[:username] %>
-<h1><%= params[:username]%>'s monster</h1>
+
+<h1><%= params[:username]%>'s <%= @name %></h1>
 
 <audio src="<%= @audio %>" autoplay="autoplay"></audio>
 
 <!--div id="svg1" style="width: 500px; height: 500px"></div-->
 
-<embed id="monster" src="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>" name="monster" type="image/svg+xml">
+<embed id="monster" src="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>&amp;mode=<%= @mode %>" name="monster" type="image/svg+xml">
 
-<p><%= @artist %> | <%= @title %> | <%= @tempo %> | <%= @tag %></p>
-<p><a href="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>">Right click and download</a></p>
+<p><%= @artist %> | <%= @title %> | <%= @tempo %> | <%= @mode %> | <%= @tag %></p>
+<p><a href="/monster.svg?tempo=<%= @tempo %>&amp;tag=<%= @tag %>&amp;mode=<%= @mode %>">Right click and download</a></p>
 
 <% end %>
