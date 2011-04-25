@@ -9,7 +9,7 @@
 <h1><%= @name.titleize %></h1>
 <p>He likes <%= @artist%>, <%= @tag%> and music in a <%= @mode%> key.</p>
 
-<audio src="<%= @audio %>" autoplay="autoplay"></audio>
+<audio src="<%= raw @audio %>" autoplay="autoplay"></audio>
 
 <!--div id="svg1" style="width: 500px; height: 500px"></div-->
 

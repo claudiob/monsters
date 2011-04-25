@@ -27,11 +27,8 @@ class MonstersController < ApplicationController
   end
 
   def index
-    sample_users = {:emo => 'RealitySound', :hip_hop => 'nigz0r', :pop => 
-      'luizf3ernando', :acoustic => 'timecircuits', :rock => 'xnetuno',
-      :punk => 'Ferlyrusuh'}
+    sample_users = {:acoustic => 'timecircuits', :hip_hop => 'nigz0r', :emo => 'RealitySound', :pop => 'luizf3ernando', :rock => 'xnetuno', :punk => 'revolutionrock1'}
     @random_user = sample_users.values[rand(sample_users.length)]
-
     
     return unless params[:username]
 
@@ -87,19 +84,19 @@ class MonstersController < ApplicationController
               if artist_name.downcase.eql? artist.downcase
 
                 # Musixmatch > get lyrics
-                lyrics_id = get_doc 'http://api.musixmatch.com/ws/1.0/track.search',
+                track_id = get_doc 'http://api.musixmatch.com/ws/1.1/track.search',
                 {:apikey => ENV['MUSIXMATCH_KEY'], :q_artist => artist,
                  :q_track => title, :format => 'xml', :page_size => '1',
-                 :f_has_lyrics => '1'}, '/message/body/track_list/track/lyrics_id'
-                unless lyrics_id.nil? || lyrics_id.empty?
-                  print "Trying lyrics: #{lyrics_id.first}\n"
-                  lyrics = get_doc 'http://api.musixmatch.com/ws/1.0/lyrics.get',
-                  {:apikey => ENV['MUSIXMATCH_KEY'], :lyrics_id => lyrics_id.first,
-                   :format => 'xml'}, '/message/body/lyrics_list/lyrics/lyrics_body'
-                  unless lyrics.nil? || lyrics.empty?
+                 :f_has_lyrics => '1'}, '/message/body/track_list/track/track_id'
+                unless track_id.nil? || track_id.empty?
+                  print "Trying lyrics: #{track_id.first}\n"
+                  lyrics = get_doc 'http://api.musixmatch.com/ws/1.1/track.lyrics.get',
+                  {:apikey => ENV['MUSIXMATCH_KEY'], :track_id => track_id.first,
+                   :format => 'xml'}, '/message/body/lyrics/lyrics_body'
+                  unless lyrics.nil? || lyrics.empty? || lyrics.first.empty?
                     @lyrics = lyrics.first
                     @audio = "http://api.7digital.com/1.2/track/preview?trackId=#{track["id"].to_i}&country=gb&oauth_consumer_key=musichackday"
-                    @tempo = tempo.to_f
+                    @tempo = tempo.to_f * 1.02
                     @mode = mode.to_i.zero? ? "minor" : "major"
                     @loudness = loudness.to_f
                     @title = title
