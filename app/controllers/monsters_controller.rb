@@ -93,7 +93,7 @@ class MonstersController < ApplicationController
                   lyrics = get_doc 'http://api.musixmatch.com/ws/1.1/track.lyrics.get',
                   {:apikey => ENV['MUSIXMATCH_KEY'], :track_id => track_id.first,
                    :format => 'xml'}, '/message/body/lyrics/lyrics_body'
-                  unless lyrics.nil? || lyrics.empty? || lyrics.first.empty?
+                  unless lyrics.nil? || lyrics.empty? || lyrics.first.empty? || lyrics.first.split(" ").length < 2
                     @lyrics = lyrics.first
                     @audio = "http://api.7digital.com/1.2/track/preview?trackId=#{track["id"].to_i}&country=gb&oauth_consumer_key=musichackday"
                     @tempo = tempo.to_f * 1.02

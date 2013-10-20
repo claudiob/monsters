@@ -3,4 +3,4 @@ db/*.sqlite3
 log/*.log
 tmp/**/*
 config/api_keys.yml
-
+how_to_run_locally
