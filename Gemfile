@@ -1,13 +1,12 @@
 source 'http://rubygems.org'
+ruby '1.8.7'
 
-gem 'rails', '3.0.0'
+gem 'rails', '~> 3.0'
 
-gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'json', '1.4.6'   # required by lastfm
 
-gem 'json'   # required by lastfm
+gem 'httpclient', '2.1.5.2'
 
-gem 'ruby-debug', :group => :development
+gem 'libxml-ruby', '1.1.4'
 
-gem 'httpclient'
-
-gem 'libxml-ruby'
+gem 'unicorn'
