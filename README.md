@@ -9,4 +9,4 @@ TODOs
 * Make image exportable
 * Set dimensions and background
 * Think about lyrics
-* Check why Firefox does not animate
+
