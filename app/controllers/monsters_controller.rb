@@ -76,7 +76,7 @@ class MonstersController < ApplicationController
             print "Trying tempo: #{tempo}\n"
 
             tracks_id = get_doc 'http://api.7digital.com/1.2/track/search',
-            {:oauth_consumer_key => "musichackday", :country => 'gb', 
+            {:oauth_consumer_key => ENV['KEY_7DIGITAL'], :country => 'gb',
              :q => title}, '/response/searchResults/searchResult/track', false
             tracks_id.each do |track|
               print "Trying audio: #{track["id"]}\n"
@@ -95,7 +95,9 @@ class MonstersController < ApplicationController
                    :format => 'xml'}, '/message/body/lyrics/lyrics_body'
                   unless lyrics.nil? || lyrics.empty? || lyrics.first.empty? || lyrics.first.split(" ").length < 2
                     @lyrics = lyrics.first
-                    @audio = "http://api.7digital.com/1.2/track/preview?trackId=#{track["id"].to_i}&country=gb&oauth_consumer_key=musichackday"
+                    consumer = OAuth::Consumer.new ENV['KEY_7DIGITAL'], ENV['SECRET_7DIGITAL'], site: "http://previews.7digital.com", scheme: :query_string
+                    req = Net::HTTP::Get.new "http://previews.7digital.com/clip/#{track["id"].to_i}?country=gb"
+                    @audio = consumer.sign! req
                     @tempo = tempo.to_f * 1.02
                     @mode = mode.to_i.zero? ? "minor" : "major"
                     @loudness = loudness.to_f
@@ -142,12 +144,12 @@ class MonstersController < ApplicationController
 
     tag = "pop" unless GENRES.keys.include? tag
 
-    parser = XML::Parser.file Rails.root.join('public', 'svg', "#{tag}_1.svg")
+    parser = XML::Parser.file Rails.root.join('public', 'svg', "#{tag}_1.svg").to_s
     doc = parser.parse
     # Remove <pattern>
     doc.find_first('*').remove!
 
-    parser2 = XML::Parser.file Rails.root.join('public', 'svg', "#{tag}_2.svg")
+    parser2 = XML::Parser.file Rails.root.join('public', 'svg', "#{tag}_2.svg").to_s
     doc2 = parser2.parse
     # Remove <pattern>
     doc2.find_first('*').remove!
